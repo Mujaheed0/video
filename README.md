@@ -8,7 +8,7 @@ Video Library for DotA 2 Games and documentaries
 
 The project is deployed on Vercel on the below url
 
-[https://aegistube.vercel.app](https://aegistube.vercel.app)
+[https://video-one-nu.vercel.app/explore](https://video-one-nu.vercel.app))
 
 ---
 
