@@ -3,7 +3,7 @@ import { Suspense, lazy } from "react";
 import { Loader } from "../components";
 import RequiresAuth from "./RequiresAuth";
 import RedirectAuth from "./RedirectAuth";
-
+import { nanoid } from "@reduxjs/toolkit";
 const LandingPage = lazy(() => import("../pages/landing-page/LandingPage"));
 const ApiResponse = lazy(() => import("../pages/api-response/ApiResponse"));
 const Explore = lazy(() => import("../pages/explore/Explore"));
@@ -23,25 +23,25 @@ export default function () {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        <Route path="/mockbee" element={<ApiResponse />} />
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route element={<RedirectAuth />}>
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/signup" element={<Signup />} />
+        <Route path="/mockbee" element={<ApiResponse />} key={nanoid()} />
+        <Route path="/" element={<LandingPage />} key={nanoid()} />
+        <Route path="/explore" element={<Explore />} key={nanoid()} />
+        <Route element={<RedirectAuth />} key={nanoid()}>
+          <Route path="/auth/login" element={<Login />} key={nanoid()} />
+          <Route path="/auth/signup" element={<Signup />} key={nanoid()} />
         </Route>
-        <Route element={<RequiresAuth />}>
-          <Route path="/video/:videoId" element={<Video />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/playlist" element={<Playlist />} />
+        <Route element={<RequiresAuth />} key={nanoid()}>
+          <Route path="/video/:videoId" element={<Video />} key={nanoid()} />
+          <Route path="/history" element={<History />} key={nanoid()} />
+          <Route path="/playlist" element={<Playlist />} key={nanoid()} />
           <Route
             path="/playlist/:playlistId"
-            element={<IndividualPlaylist />}
+            element={<IndividualPlaylist />} key={nanoid()}
           />
-          <Route path="/watch-later" element={<WatchLater />} />
-          <Route path="/liked-videos" element={<Liked />} />
+          <Route path="/watch-later" element={<WatchLater />} key={nanoid()} />
+          <Route path="/liked-videos" element={<Liked />} key={nanoid()} />
         </Route>
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} key={nanoid()} />
       </Routes>
     </Suspense>
   );

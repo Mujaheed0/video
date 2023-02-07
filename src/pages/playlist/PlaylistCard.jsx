@@ -2,15 +2,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
 import styles from "./Playlist.module.css";
-import { useVideos } from "../../context/videos";
+import { useDispatch } from "react-redux";
+import { deletePlaylist } from "../../store/thunks/deletePlaylist";
 
 export default function ({ playlist }) {
-  const { deletePlaylist } = useVideos();
+  const dispatch=useDispatch();
   const navigate = useNavigate();
 
   const handleClick = (event, playlist) => {
     event.preventDefault();
-    deletePlaylist(playlist);
+  dispatch(deletePlaylist(playlist))
     navigate("/playlist");
   };
 

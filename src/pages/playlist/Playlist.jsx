@@ -3,7 +3,7 @@ import { Modal, Button, AddPlaylistForm } from "../../components";
 import { useState } from "react";
 import styles from "./Playlist.module.css";
 import PlaylistCard from "./PlaylistCard";
-import { useVideos } from "../../context/videos";
+import { useSelector } from "react-redux";
 
 export default function () {
   useDocumentTitle("Playlists | AegisTube");
@@ -12,7 +12,7 @@ export default function () {
   const toggleModal = () => setShowModal((t) => !t);
   const closeModal = () => setShowModal(false);
 
-  const { playlists } = useVideos();
+  const { playlists } = useSelector(state=>state.videos.metaData);
 
   return (
     <div className="content-container">

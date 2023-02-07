@@ -1,13 +1,13 @@
 import styles from "./WatchLater.module.css";
-import { useVideos } from "../../context/videos";
 import { useDocumentTitle } from "../../hooks";
 import { Empty } from "../../components";
 import WatchLaterCard from "./WatchLaterCard";
+import { useSelector } from "react-redux";
 
 export default function () {
   useDocumentTitle("Watch Later | AegisTube");
 
-  const { watchLater } = useVideos();
+  const { watchLater } = useSelector(state=>state.videos.metaData);
 
   return (
     <div>

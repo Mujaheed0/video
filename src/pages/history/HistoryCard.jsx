@@ -1,9 +1,10 @@
 import { AiOutlineDelete } from "react-icons/ai";
-import { useVideos } from "../../context/videos/Context";
+import { useDispatch } from "react-redux";
+import { removeFromHistory } from "../../store/thunks/removeFromHistory";
 import styles from "./History.module.css";
 
 export default function ({ video }) {
-  const { removeFromHistory } = useVideos();
+  const dispatch=useDispatch()
 
   return (
     <div className={styles.card}>
@@ -17,7 +18,7 @@ export default function ({ video }) {
         </div>
         <div
           className={styles.icon}
-          onClick={() => removeFromHistory(video)}
+          onClick={() => dispatch(removeFromHistory(video))}
           title="Remove video from watch history">
           <AiOutlineDelete />
         </div>

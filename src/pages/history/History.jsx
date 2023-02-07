@@ -1,14 +1,16 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Empty } from "../../components";
-import { useVideos } from "../../context/videos/Context";
 import { useDocumentTitle } from "../../hooks";
+import { clearHistory } from "../../store/thunks/clearHistory";
 import styles from "./History.module.css";
 import HistoryCard from "./HistoryCard";
 
 export default function () {
   useDocumentTitle("History | AegisTube");
 
-  const { history, clearHistory } = useVideos();
-
+  const { history } = useSelector(state=>state.videos?.metaData);
+  console.log(history)
+let dispatch=useDispatch()
   return (
     <div className="content-container">
       <div className={styles.container}>
@@ -18,7 +20,7 @@ export default function () {
           <div>
             <div className={styles.heading}>
               <>History</>
-              <Button variant="primary" onClick={() => clearHistory()}>
+              <Button variant="primary" onClick={() => dispatch(clearHistory())}>
                 Clear history
               </Button>
             </div>

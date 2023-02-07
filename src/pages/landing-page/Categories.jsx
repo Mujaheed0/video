@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./LandingPage.module.css";
-import { useVideos } from "../../context/videos";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { changeCategory } from "../../store/slices/videoSlice";
 
 export default function () {
   const [categories, setCategories] = useState([]);
-  const { changeCategory } = useVideos();
+ const {category}=useSelector(state=>state.videos.metaData)
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
@@ -18,9 +19,9 @@ export default function () {
       }
     })();
   }, []);
-
+let dispatch=useDispatch();
   const handleClick = (categoryName) => {
-    changeCategory(categoryName);
+   dispatch(changeCategory(categoryName));
     navigate("/explore");
   };
 

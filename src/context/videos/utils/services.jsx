@@ -75,8 +75,8 @@ const addNewPlaylistHandler = (playlistForm) =>
     }
   );
 
-const deletePlaylistHandler = () =>
-  axios.delete(`/api/user/playlists/${playlist._id}`, {
+const deletePlaylistHandler = (id) =>
+  axios.delete(`/api/user/playlists/${id}`, {
     headers: {
       authorization: localStorage.getItem("video-lib-user-token"),
     },

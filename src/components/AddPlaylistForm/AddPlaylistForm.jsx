@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useVideos } from "../../context/videos";
+import { useDispatch } from "react-redux";
+import { addNewPlaylist } from "../../store/thunks/addNewPlaylist";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import styles from "./AddPlaylistForm.module.css";
@@ -10,8 +11,7 @@ export default function () {
     description: "",
   });
 
-  const { addNewPlaylist } = useVideos();
-
+let dispatch=useDispatch();
   const handleChange = (event) => {
     setPlaylistForm({
       ...playlistForm,
@@ -21,7 +21,7 @@ export default function () {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addNewPlaylist(playlistForm);
+  dispatch(  addNewPlaylist(playlistForm));
     setPlaylistForm({
       title: "",
       description: "",

@@ -1,55 +1,44 @@
 import ReactPlayer from "react-player";
 import styles from "./Video.module.css";
-import { AiOutlineLike } from "react-icons/ai";
 import { MdOutlineWatchLater, MdOutlinePlaylistAdd } from "react-icons/md";
 import { useParams } from "react-router-dom";
-import { useVideos } from "../../context/videos/Context";
 import {
   getVideoData,
-  getRelatedVideos,
-  isVideoLiked,
-  isVideoInWatchLater,
+  
 } from "./Utils";
 import { Modal, VideoCard } from "../../components";
 import Action from "./Action";
 import { useState } from "react";
 import PlaylistModal from "./PlaylistModal/PlaylistModal";
+import { addToLikedVideos } from "../../store/thunks/addToLikedVideos";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromLikedVideos } from "../../store/thunks/removeFromLikedVideos";
+import { isInWatchLater, isVideoLiked } from "../../store/slices/videoSlice";
+import { addToHistory } from "../../store/thunks/addToHistory";
+import { removeFromWatchLater } from "../../store/thunks/removeFromWatchLater";
+import { addToWatchLater } from "../../store/thunks/addToWatchLater";
+import LikeAction from "./LikeAction";
+import { RelatedVideo } from "./RelatedVideo";
 
 export default function () {
   const { videoId } = useParams();
-  const {
-    videos,
-    addToLikedVideos,
-    likedVideos,
-    addToWatchlater,
-    watchLater,
-    addToHistory,
-  } = useVideos();
+  
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal((t) => !t);
   const closeModal = () => setShowModal(false);
-
-  const video = getVideoData(videoId, videos);
-  const relatedVideos = getRelatedVideos(video?.category, videos);
-  const isLiked = isVideoLiked(video, likedVideos);
-  const isInWatchlater = isVideoInWatchLater(video, watchLater);
-
+let dispatch=useDispatch();
+  const video = useSelector(state=>state.videos.videos.find(i=>i.videoId===videoId));
+  const isWatchLater = useSelector(state=>isInWatchLater(state,video));
+console.log(isWatchLater)
   const actions = [
-    {
-      id: 1,
-      icon: <AiOutlineLike />,
-      title: "Like the video",
-      name: "Like",
-      clickHandler: () => addToLikedVideos(video),
-      isAlreadyExists: isLiked,
-    },
+   
     {
       id: 2,
       icon: <MdOutlineWatchLater />,
       title: "Add Video to Watch Later list",
       name: "Watch Later",
-      clickHandler: () => addToWatchlater(video),
-      isAlreadyExists: isInWatchlater,
+      clickHandler: () => isWatchLater?dispatch(removeFromWatchLater(video)): dispatch(addToWatchLater(video)),
+      isAlreadyExists: isWatchLater,
     },
     {
       id: 3,
@@ -69,12 +58,13 @@ export default function () {
               url={`http://www.youtube.com/watch?v=${videoId}`}
               controls={true}
               className={styles.video}
-              onStart={() => addToHistory(video)}
+              onStart={() =>dispatch( addToHistory(video))}
               width="100%"
               height="100%"
             />
           </div>
           <div className={styles.actions__container}>
+            <LikeAction video={video}></LikeAction>
             {actions.map((action) => (
               <Action key={action.id} action={action} />
             ))}
@@ -95,14 +85,7 @@ export default function () {
             </div>
           </div>
         </div>
-        <div>
-          <h3>Related Videos</h3>
-          <div className={styles.related__videos}>
-            {relatedVideos.map((video) => (
-              <VideoCard key={video._id} video={video} />
-            ))}
-          </div>
-        </div>
+       <RelatedVideo video={video}></RelatedVideo>
       </div>
       <Modal showModal={showModal} header="Playlist" closeModal={closeModal}>
         <PlaylistModal video={video} />

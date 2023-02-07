@@ -1,11 +1,13 @@
-import { useVideos } from "../../../../context/videos";
+
 import { Button } from "../../../../components";
 import { GrPowerReset } from "react-icons/gr";
 import styles from "./Filters.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { changeCategory } from "../../../../store/slices/videoSlice";
 
 export default function () {
-  const { category, changeCategory } = useVideos();
-
+let dispatch=useDispatch();
+const {category}=useSelector(state=>state.videos.metaData)
   const filterBlocks = [
     {
       id: 1,
@@ -39,13 +41,13 @@ export default function () {
               className={`${styles.filter} ${
                 category === filter.text && styles.filter__active
               }`}
-              onClick={() => changeCategory(filter.text)}>
+              onClick={() =>dispatch( changeCategory(filter.text))}>
               {filter.text}
             </div>
           </>
         ))}
         <div className={styles.reset__button}>
-          <Button variant="secondary" onClick={() => changeCategory("All")}>
+          <Button variant="secondary" onClick={() => dispatch(changeCategory("All"))}>
             Reset
           </Button>
         </div>

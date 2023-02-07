@@ -1,13 +1,13 @@
 import styles from "./LikedVideos.module.css";
 import { useDocumentTitle } from "../../hooks";
 import LikedVideoCard from "./LikedVideoCard";
-import { useVideos } from "../../context/videos";
 import { Empty } from "../../components";
+import { useSelector } from "react-redux";
 
 export default function () {
   useDocumentTitle("Liked | AegisTube");
 
-  const { likedVideos } = useVideos();
+  const { likedVideos } = useSelector(state=>state.videos.metaData);
 
   return (
     <div className="content-container">

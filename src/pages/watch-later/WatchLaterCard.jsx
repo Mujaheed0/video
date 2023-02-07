@@ -1,9 +1,10 @@
+import { useDispatch } from "react-redux";
 import { WatchIcon } from "../../components";
-import { useVideos } from "../../context/videos";
+import { removeFromWatchLater } from "../../store/thunks/removeFromWatchLater";
 import styles from "./WatchLater.module.css";
 
 export default function ({ watchLaterVideo }) {
-  const { removeFromWatchlater } = useVideos();
+  const dispatch=useDispatch()
 
   return (
     <div className={styles.card}>
@@ -20,7 +21,7 @@ export default function ({ watchLaterVideo }) {
           <WatchIcon
             watchLater={1}
             title="Remove video from watch later"
-            onClick={() => removeFromWatchlater(watchLaterVideo)}
+            onClick={() =>dispatch(removeFromWatchLater(watchLaterVideo))}
           />
         </div>
       </div>

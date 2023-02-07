@@ -17,16 +17,7 @@ export const signupHandler = function (schema, request) {
   const { email, password, ...rest } = JSON.parse(request.requestBody);
   try {
     // check if email already exists
-    const foundUser = schema.users.findBy({ email });
-    if (foundUser) {
-      return new Response(
-        422,
-        {},
-        {
-          errors: ["Unprocessable Entity. Email Already Exists."],
-        }
-      );
-    }
+    
     const _id = uuid();
     const newUser = {
       _id,
@@ -41,7 +32,9 @@ export const signupHandler = function (schema, request) {
       watchlater: [],
     };
     const createdUser = schema.users.create(newUser);
-    const encodedToken = sign({ _id, email }, process.env.REACT_APP_JWT_SECRET);
+    
+    const encodedToken = sign({ _id, email }, "secret");
+    console.log({user:createdUser})
     return new Response(201, {}, { user: createdUser, encodedToken });
   } catch (error) {
     return new Response(
@@ -74,7 +67,7 @@ export const loginHandler = function (schema, request) {
     if (password === foundUser.password) {
       const encodedToken = sign(
         { _id: foundUser._id, email },
-        process.env.REACT_APP_JWT_SECRET
+        "secret"
       );
       foundUser.password = undefined;
       return new Response(200, {}, { user: foundUser, encodedToken });

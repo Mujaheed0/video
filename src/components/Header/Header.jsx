@@ -3,20 +3,29 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import AegisTube from "../../assets/AegisTube.svg";
-import { useState } from "react";
+import {  useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLogout } from "../../store";
 
 export default function ({ toggleSidebar }) {
-  const navigate = useNavigate();
+  const {user,isLoggedIn}=useSelector(state=>state.auth);
   const [showDropdown, setShowDropdown] = useState(false);
-  const { isLoggedIn, user, handleLogout } = useAuth();
-
+  let dispatch=useDispatch();
+  let navigate=useNavigate();
   const toggleShowDropdown = () => setShowDropdown((s) => !s);
 
   const openDropdown = () => setShowDropdown(true);
   const closeDropdown = () => setShowDropdown(false);
 
+function Logout(){
+  
+  dispatch(handleLogout()).unwrap().then(i=>{
+    localStorage.removeItem("video-lib-user-token");
+    localStorage.removeItem("video-lib-user") ;
+    
+  })
+}
   return (
     <header className={styles.header}>
       <div className="container">
@@ -47,7 +56,7 @@ export default function ({ toggleSidebar }) {
                   <div className={styles.dropdown}>
                     <div
                       className={styles.dropdown__item}
-                      onClick={handleLogout}>
+                      onClick={Logout}>
                       Logout
                     </div>
                   </div>

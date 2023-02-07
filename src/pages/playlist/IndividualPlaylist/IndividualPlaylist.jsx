@@ -1,16 +1,18 @@
 import { Link, useParams } from "react-router-dom";
-import { useVideos } from "../../../context/videos";
 import { AiOutlineDelete } from "react-icons/ai";
 import styles from "./IndividualPlaylist.module.css";
 import { getPlaylist } from "./Utils";
 import { Empty } from "../../../components";
+import { useSelector } from "react-redux";
+import { removeVideoFromPlaylist } from "../../../store/thunks/removeVideoFromPlaylist";
+import { useDispatch } from "react-redux";
 
 export default function () {
   const { playlistId } = useParams();
-  const { playlists, removeVideoFromPlaylist } = useVideos();
+  const { playlists } = useSelector(state=>state.videos.metaData);
 
   const playlist = getPlaylist(playlists, playlistId);
-
+const dispatch=useDispatch()
   return (
     <div className="content-container">
       <div className={styles.playlist__title}>{playlist?.title}</div>
@@ -39,7 +41,7 @@ export default function () {
               </Link>
               <div
                 className={styles.icon}
-                onClick={() => removeVideoFromPlaylist(playlist._id, video)}>
+                onClick={() =>dispatch( removeVideoFromPlaylist({id:playlist._id, video}))}>
                 <AiOutlineDelete />
               </div>
             </div>

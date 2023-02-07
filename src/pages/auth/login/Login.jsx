@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { Button, Input } from "../../../components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styles from "./Login.module.css";
-import { useAuth } from "../../../context/auth";
-
+import { useDispatch } from "react-redux";
+import { handleLogin } from "../../../store";
+import { useLocalStorage } from "../../../hooks";
 export default function () {
+  
+  const [userToken, setUserToken] = useLocalStorage("video-lib-user-token");
+  const [userData, setUserData] = useLocalStorage("video-lib-user");
+  const navigate=useNavigate();
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { handleLogin } = useAuth();
-
+const dispatch=useDispatch()
   const location = useLocation();
   const path = location.state?.from?.pathname || "/";
 
@@ -27,7 +31,12 @@ export default function () {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleLogin(loginForm, path);
+    dispatch(handleLogin(loginForm)).unwrap().then(i=>{
+        setUserData(i.user);
+        setUserToken(i.encodedToken)
+      })
+        
+      navigate(path,{replace:true})
     setLoginForm({
       email: "",
       password: "",
@@ -36,13 +45,18 @@ export default function () {
 
   const guestLogin = (event) => {
     event.preventDefault();
-    handleLogin(
+  dispatch(  handleLogin(
       {
         email: "tahirahmed@gmail.com",
         password: "aegistube",
-      },
-      path
-    );
+      }
+    )).unwrap().then(i=>{
+      setUserData(i.user);
+      setUserToken(i.encodedToken)
+      
+    navigate(path,{replace:true})
+    })
+      
     setLoginForm({
       email: "",
       password: "",

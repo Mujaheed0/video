@@ -1,20 +1,26 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Button, Input } from "../../../components";
-import { useAuth } from "../../../context/auth";
+import { useLocalStorage } from "../../../hooks";
+import { handleSignUp } from "../../../store";
 import styles from "./Signup.module.css";
 
+
 export default function () {
+  let navigate=useNavigate();
+   let dispatch=useDispatch()
+  const [userToken, setUserToken] = useLocalStorage("video-lib-user-token");
+  const [userData, setUserData] = useLocalStorage("video-lib-user");
   const [signupForm, setSignupForm] = useState({
     firstName: "",
     lastName: "",
-    contact: "",
+    contact:"" ,
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { handleSignup } = useAuth();
 
   const location = useLocation();
   const path = location.state?.from?.pathname || "/";
@@ -33,7 +39,11 @@ export default function () {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleSignup(signupForm, path);
+    dispatch(handleSignUp(signupForm)).unwrap().then(i=>{
+        setUserData(i.user);
+        setUserToken(i.encodedToken);       
+      navigate(path,{replace:true})
+      })
     setSignupForm({
       firstName: "",
       lastName: "",

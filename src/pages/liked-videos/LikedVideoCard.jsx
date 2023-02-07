@@ -1,10 +1,10 @@
+import { useDispatch } from "react-redux";
 import { Liked } from "../../components";
-import { useVideos } from "../../context/videos";
+import { removeFromLikedVideos } from "../../store/thunks/removeFromLikedVideos";
 import styles from "./LikedVideos.module.css";
 
 export default function ({ likedVideo }) {
-  const { removeFromLikedVideos } = useVideos();
-
+let dispatch=useDispatch();
   return (
     <div className={styles.card}>
       <div>
@@ -17,7 +17,7 @@ export default function ({ likedVideo }) {
       <div className={styles.card__description}>
         <div className={styles.title}>{likedVideo.title}</div>
         <div className={styles.like__container} title="Dislike video">
-          <Liked liked={1} onClick={() => removeFromLikedVideos(likedVideo)} />
+          <Liked liked={1} onClick={() => dispatch(removeFromLikedVideos(likedVideo))} />
         </div>
       </div>
     </div>

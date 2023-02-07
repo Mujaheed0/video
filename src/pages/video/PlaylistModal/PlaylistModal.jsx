@@ -1,12 +1,14 @@
-import { useVideos } from "../../../context/videos/Context";
+
 import { checkVideoInPlayList } from "../Utils";
 import { AddPlaylistForm } from "../../../components";
 import styles from "./Playlist.module.css";
 import PlaylistItem from "./PlaylistItem";
+import { useSelector } from "react-redux";
 
 export default function ({ video }) {
-  const { playlists, addVideoToPlaylist } = useVideos();
-
+  console.log(video)
+const {playlists}=useSelector(state=>state.videos.metaData);
+if(video){
   return (
     <div className={styles.modal}>
       <div className={`${styles.playlists}`}>
@@ -29,4 +31,4 @@ export default function ({ video }) {
       </div>
     </div>
   );
-}
+}}

@@ -11,7 +11,7 @@ const isVideoInWatchLater = (video, watchLater) =>
   watchLater.some((wVideo) => wVideo._id === video._id);
 
 const checkVideoInPlayList = (video, playlist) =>
-  playlist.videos?.some((pVideo) => pVideo._id === video?._id);
+  playlist.videos?.some((pVideo) => pVideo._id === video?._id)||false;
 
 export {
   getRelatedVideos,
